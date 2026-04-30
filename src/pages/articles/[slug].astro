@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => data.status === 'published');
+  return articles.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+---
+<Layout title={article.data.title} description={article.data.description}>
+  <article>
+    <h1 style="font-size:1.6rem; margin-bottom:.5rem;">{article.data.title}</h1>
+    <p style="color:#aaa; font-size:.85rem; margin-bottom:2rem;">
+      {article.data.pubDate.toLocaleDateString('ja-JP')}
+    </p>
+    <div class="content">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .content h2 { font-size: 1.3rem; margin: 2rem 0 .8rem; border-left: 4px solid #e74c3c; padding-left: .8rem; }
+  .content h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
+  .content p { margin-bottom: 1rem; }
+  .content ul { margin: .5rem 0 1rem 1.5rem; }
+  .content a { color: #e74c3c; }
+  .content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+  .content th, .content td { border: 1px solid #ddd; padding: .5rem .8rem; text-align: left; }
+  .content th { background: #f5f5f5; }
+</style>

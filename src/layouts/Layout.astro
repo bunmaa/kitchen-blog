@@ -1,0 +1,35 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = '調理家電のおすすめ情報をお届けするブログ' } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{title} | 調理家電ナビ</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; color: #333; background: #f9f9f9; line-height: 1.8; }
+    header { background: #e74c3c; color: white; padding: 1rem 2rem; }
+    header a { color: white; text-decoration: none; font-size: 1.4rem; font-weight: bold; }
+    main { max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+    footer { text-align: center; padding: 2rem; color: #888; font-size: 0.85rem; margin-top: 4rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="/">調理家電ナビ</a>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer>
+    <p>当サイトはAmazonアソシエイトのリンクを含みます。</p>
+  </footer>
+</body>
+</html>

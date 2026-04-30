@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allArticles = await getCollection('articles');
+const published = allArticles
+  .filter(a => a.data.status === 'published')
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<Layout title="ホーム">
+  <h1 style="font-size:1.8rem; margin-bottom:1.5rem;">調理家電おすすめ情報</h1>
+  {published.length === 0 ? (
+    <p style="color:#888;">記事を準備中です。</p>
+  ) : (
+    <ul style="list-style:none;">
+      {published.map(article => (
+        <li style="background:white; border-radius:8px; padding:1.2rem; margin-bottom:1rem; box-shadow:0 1px 4px rgba(0,0,0,.08);">
+          <a href={`/articles/${article.slug}`} style="text-decoration:none; color:#e74c3c; font-size:1.1rem; font-weight:bold;">
+            {article.data.title}
+          </a>
+          <p style="margin-top:.4rem; color:#555; font-size:.9rem;">{article.data.description}</p>
+          <p style="margin-top:.4rem; color:#aaa; font-size:.8rem;">
+            {article.data.pubDate.toLocaleDateString('ja-JP')}
+          </p>
+        </li>
+      ))}
+    </ul>
+  )}
+</Layout>
